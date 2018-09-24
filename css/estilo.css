@@ -1,0 +1,26 @@
+body {
+  background-image: url("https://k44.kn3.net/taringa/1/6/1/4/7/8/23/ladypost/0F9.jpg?3269");
+  margin-top: 10px;
+}
+h2{
+  text-align: center;
+
+}
+button {
+  margin-bottom: 10px;
+}
+.container{
+
+}
+.imgchica{
+  width: 100%;
+  height:100%;
+
+}
+#canvas{
+  background-color: black;
+
+  margin-left: -16px;
+
+
+}
