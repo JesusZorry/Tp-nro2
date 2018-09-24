@@ -37,7 +37,7 @@ Ficha.prototype.dibFichaMov = function (x,y,ctx){
   ctx.closePath();
   ctx.stroke();
 }
-Ficha.prototype.seleccion = function (x,y,ficha) {
+Ficha.prototype.seleccion = function (x,y,ficha) { // triangula la posicion, para saber asi si el click fue o no en su ficha
   var hipotenusa = Math.floor(Math.sqrt(((x - ficha.PosX) * (x - ficha.PosX)) + ((y - ficha.PosY) * (y - ficha.PosY))));
   if ((hipotenusa) <= (ficha.radio)){
     return true;
