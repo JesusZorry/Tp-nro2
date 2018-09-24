@@ -28,9 +28,10 @@ Jugador.prototype.moverFicha = function(x,y,ctx,ficha) {
   this.fichas[ficha].dibFichaMov(x,y,ctx);
 
 };
-Jugador.prototype.misFichas = function (x,y) {
+Jugador.prototype.misFichas = function (x,y) { // devuelve true en caso de que el click sea en una de sus fichas
   for (var i = 0; i < this.fichas.length; i++) {
     if (this.fichas[i].seleccion(x,y,this.fichas[i])){
+        console.log(i);
         return i;
     }
   }

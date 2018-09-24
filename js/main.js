@@ -17,8 +17,8 @@ function mueveRaton(x,y,jugador,ctx){
   }
 }
 canvas.addEventListener('mousemove',function(event){
-  var x = event.layerX - event.currentTarget.offsetLeft ;
-  var y = event.layerY - event.currentTarget.offsetTop ;
+  var x = event.clientX - canvas.getBoundingClientRect().left -1.5;
+  var y = event.clientY - canvas.getBoundingClientRect().top;
   if (jugador1.turno){
       mueveRaton(x,y,jugador1,ctx); // le paso el jugador para saber que fichas voy a mover
   }
@@ -27,20 +27,21 @@ canvas.addEventListener('mousemove',function(event){
   }
 });
 canvas.addEventListener("mousedown", function(event){
-    var x = event.layerX - event.currentTarget.offsetLeft ;
-    var y = event.layerY - event.currentTarget.offsetTop ;
+    var x = event.clientX - canvas.getBoundingClientRect().left -1.5;
+    var y = event.clientY - canvas.getBoundingClientRect().top;
+    console.log(x,y);
     if (jugador1.misFichas(x,y)>= 0){
       console.log("1");
       jugador1.turno = true;
       pf=jugador1.misFichas(x,y);
       jugador2.turno = false;
-    }
+    }else {
     if (jugador2.misFichas(x,y)>= 0){
       console.log("2");
       jugador2.turno = true;
       pf=jugador2.misFichas(x,y);
       jugador1.turno = false;
-    }
+    }}
     pf=0;
 });
 function levantaRaton(x,y,ctx,jugador){
@@ -71,8 +72,8 @@ function levantaRaton(x,y,ctx,jugador){
 
 }
 canvas.addEventListener('mouseup', function(event){
-  let x = event.layerX - event.currentTarget.offsetLeft  ;
-  let y = event.layerY - event.currentTarget.offsetTop  ;
+  var x = event.clientX - canvas.getBoundingClientRect().left -1.5;
+  var y = event.clientY - canvas.getBoundingClientRect().top;
   if (jugador1.turno){
     levantaRaton(x,y,ctx,jugador1);
   }
@@ -82,5 +83,4 @@ canvas.addEventListener('mouseup', function(event){
 
 });
 
-
-tablero.dibujarGrilla();
+//tablero.dibujarGrilla();
