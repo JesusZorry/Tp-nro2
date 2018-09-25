@@ -66,6 +66,7 @@ function levantaRaton(x,y,ctx,jugador){
        tablero.dibujarGrilla();
        jugador1.dibFichaP();
        jugador2.dibFichaP();
+       tablero.verificarDiagonales(jugador.numero);
        if (tablero.verificarVictoria(jugador.numero)){
          jugador1.turno=false;
          jugador2.turno=false;

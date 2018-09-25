@@ -82,6 +82,22 @@ Tablero.prototype.reiniciar = function () {
     }
   }
 };
+Tablero.prototype.verificarDiagonales= function(jugador){
+  for (x = 0; x < this.Matrix.length; x++) {
+    for (i = 0; i < this.Matrix[x].length; i++) {
+      if(this.Matrix[x][i] == jugador){
+        if((x < this.Matrix.length-3) &&(i+3<this.Matrix[x].length)){
+            console.log(x,i);
+          if ((this.Matrix[x+1][i-1] == jugador) && (this.Matrix[x+2][i-2] == jugador) && (this.Matrix[x+3][i-3] == jugador)) {
+            console.log("encontro");
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false
+}
 Tablero.prototype.verificarVictoria = function(jugador){ //El valor del jugador 1, 2
   for (x = 0; x < this.Matrix.length; x++) {
     for (i = 0; i < this.Matrix[x].length; i++) {
@@ -101,5 +117,6 @@ Tablero.prototype.verificarVictoria = function(jugador){ //El valor del jugador 
       }
     }
   }
+
   return false;
 }
