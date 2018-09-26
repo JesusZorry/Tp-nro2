@@ -10,12 +10,12 @@ Ficha.prototype.setColor = function(color){
 Ficha.prototype.circulodib = function (ctx){
   ctx.fillStyle = this.color;
   // var img = new Image();
-  // img.src = "imagenes/horda.png";
+  // img.src = "imagenes/tintin.png";
   // ctx.beginPath();
   // var imgx =this.PosX ;
   // var imgy= this.PosY;
   // img.onload = function(){
-  //
+  //   console.log(imgx,imgy);
   //
   //   ctx.drawImage(img,imgx,imgy,68,68);
   // }
@@ -37,7 +37,7 @@ Ficha.prototype.dibFichaMov = function (x,y,ctx){
   ctx.closePath();
   ctx.stroke();
 }
-Ficha.prototype.seleccion = function (x,y,ficha) { // triangula la posicion, para saber asi si el click fue o no en su ficha
+Ficha.prototype.seleccion = function (x,y,ficha) {
   var hipotenusa = Math.floor(Math.sqrt(((x - ficha.PosX) * (x - ficha.PosX)) + ((y - ficha.PosY) * (y - ficha.PosY))));
   if ((hipotenusa) <= (ficha.radio)){
     return true;
