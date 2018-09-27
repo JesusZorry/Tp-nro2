@@ -1,6 +1,6 @@
 var columnas = 7;
 var filas = 6;
-function Tablero(){
+function Grilla(){
   this.Matrix = new Array(columnas);
   for (var i = 0; i < this.Matrix.length; i++) {
     this.Matrix[i] = new Array(filas);
@@ -9,23 +9,24 @@ function Tablero(){
     }
   }
 }
-
-Tablero.prototype.cargarTablero = function (x, y, ctx, offsetX, offsetY, celda){
-var ficha = new Ficha((x*celda)+offsetX,(y*celda)+offsetY,"#000000",celda);
+// ----- funcionalidades de la grilla
+Grilla.prototype.cargarGrilla = function (x, y, ctx, offsetX, offsetY, celda){
+var ficha = new Ficha((x*celda)+offsetX,(y*celda)+offsetY,"#FFFFFF",celda,"");
+var Grilla = true;
   if (this.Matrix[x][y] == 1) {
-    ficha.setColor("#FF0000");
-    ficha.circulodib(ctx);
+    ficha.setImg("imagenes/caritafeliz.png");
+    ficha.dibujarFicha(ctx,Grilla);
   }
   else if (this.Matrix[x][y] == 2){
-    ficha.setColor("#0000FF");
-    ficha.circulodib(ctx);
+    ficha.setImg("imagenes/carita aun mas feliz.png");
+    ficha.dibujarFicha(ctx,Grilla);
   }
   else {
-      ficha.setColor("#FFFFFF")
-      ficha.circulodib(ctx);
+      ficha.dibujarFicha(ctx,Grilla);
   }
 }
-Tablero.prototype.queColumnaAmeo = function (x,y) {
+Grilla.prototype.enLaGrilla = function (x,y) {
+  // verifica en que columna de la grilla cayo la ficha si es que es un mouseup valido.
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext('2d');
   var celda = ((2/3)*ctx.canvas.height)/filas;
@@ -38,7 +39,8 @@ Tablero.prototype.queColumnaAmeo = function (x,y) {
   }
   return -1;
 };
-Tablero.prototype.dibujarGrilla = function() {
+Grilla.prototype.dibujarGrilla = function() {
+  //--dibuja la grilla principal
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext('2d');
     var celda = ((2/3)*ctx.canvas.height)/filas;
@@ -47,24 +49,24 @@ Tablero.prototype.dibujarGrilla = function() {
       for (var x = 0; x <= columnas; x++) {
           for (var y = 0; y <= filas; y++) {
              if ((x<columnas)&&(y<filas)) {
-                this.cargarTablero(x,y,ctx,offsetX,offsetY,celda);
+                this.cargarGrilla(x,y,ctx,offsetX,offsetY,celda);
             }
 
         }
     }
 };
 
-Tablero.prototype.setValor = function (x,y,valor){
+Grilla.prototype.setValor = function (x,y,valor){
   //ubica la ficha
 if ((x < columnas) && (y < filas)) {
       this.Matrix[x][y] = valor;
   }
   else {
-    console.log ("No anda");
+
   }
 };
 
-Tablero.prototype.getPosi = function (x){
+Grilla.prototype.getPosi = function (x){
   //calcula el ultimo espacio libre de la columna
    for (y = filas-1; y < this.Matrix[x].length; y--) {
      if (y< 0){return -1}; // en caso de que la grilla este llena
@@ -74,7 +76,7 @@ Tablero.prototype.getPosi = function (x){
     }
     return -1;
   };
-Tablero.prototype.reiniciar = function () {
+Grilla.prototype.reiniciar = function () { //--formatea a 0 la grilla logica.
   for (var i = 0; i < this.Matrix.length; i++) {
     this.Matrix[i] = new Array(filas);
     for (var j = 0; j < this.Matrix[i].length; j++) {
@@ -82,23 +84,26 @@ Tablero.prototype.reiniciar = function () {
     }
   }
 };
-Tablero.prototype.verificarDiagonales= function(jugador){
+Grilla.prototype.verificarDiagonales= function(jugador){
   for (x = 0; x < this.Matrix.length; x++) {
     for (i = 0; i < this.Matrix[x].length; i++) {
       if(this.Matrix[x][i] == jugador){
-        if((x < this.Matrix.length-3) &&(i+3<this.Matrix[x].length)){
-            console.log(x,i);
+        if((x+3 < this.Matrix.length) &&(i-3>0)&&(i<this.Matrix[x].length)){ // busca una vertical asendente
           if ((this.Matrix[x+1][i-1] == jugador) && (this.Matrix[x+2][i-2] == jugador) && (this.Matrix[x+3][i-3] == jugador)) {
-            console.log("encontro");
             return true;
           }
+        }
+        if ((x+3 < this.Matrix.length)&&(i+3<this.Matrix[x].length)){ // busca una desendente
+            if ((this.Matrix[x+1][i+1] == jugador) && (this.Matrix[x+2][i+2] == jugador) && (this.Matrix[x+3][i+3] == jugador)) {
+              return true;
+            }
         }
       }
     }
   }
   return false
 }
-Tablero.prototype.verificarVictoria = function(jugador){ //El valor del jugador 1, 2
+Grilla.prototype.verificarHorizontales = function (jugador) {
   for (x = 0; x < this.Matrix.length; x++) {
     for (i = 0; i < this.Matrix[x].length; i++) {
       if ((this.Matrix[i][x] == jugador) && (i < this.Matrix.length -3) ){ //
@@ -108,6 +113,9 @@ Tablero.prototype.verificarVictoria = function(jugador){ //El valor del jugador 
       }
     }
   }
+  return false;
+};
+Grilla.prototype.verificarVerticales = function (jugador) {
   for (x = 0; x < this.Matrix.length; x++) {
     for (i = 0; i < this.Matrix[x].length; i++) {
       if ((this.Matrix[x][i] == jugador) && (i+3 < this.Matrix[x].length)){
@@ -115,7 +123,14 @@ Tablero.prototype.verificarVictoria = function(jugador){ //El valor del jugador 
           return true;
         }
       }
+
     }
+  }
+  return false;
+};
+Grilla.prototype.verificarVictoria = function(jugador){ //El valor del jugador 1, 2
+  if (this.verificarDiagonales(jugador)||this.verificarVerticales(jugador)||this.verificarHorizontales(jugador)){
+    return true;
   }
 
   return false;
